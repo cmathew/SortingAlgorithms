@@ -43,7 +43,8 @@ public class MergeSortFragment extends Fragment {
         List<Integer> listy = Arrays.asList(9, 5, 1, 0, 3, 8, 2, 6, 4, 7);
         // List<Integer> listy = Arrays.asList(9, 5);
 
-        List<Integer> sortedListy = MergeSorter.TopDownMergeSort(listy);
+        MergeSorter<Integer> sorter = new MergeSorter<Integer>();
+        List<Integer> sortedListy = sorter.topDownMergeSort(listy);
 
         String resultString = TextUtils.join(", ", sortedListy);
         textView.setText(resultString);

@@ -3,50 +3,50 @@ package com.example.cmathew.sortingalgorithms.mergesort;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MergeSorter {
-    public static List<Integer> TopDownMergeSort(List<Integer> list) {
+public class MergeSorter<T extends Comparable<T>> {
+    public List<T> topDownMergeSort(List<T> list) {
         if (list.size() == 1) {
             return list;
         }
 
         // half of largest index
         int pivot = list.size() / 2;
-        List<Integer> leftList = list.subList(0, pivot);
-        List<Integer> rightList = list.subList(pivot, list.size());
+        List<T> leftList = list.subList(0, pivot);
+        List<T> rightList = list.subList(pivot, list.size());
 
-        List<Integer> leftResult = TopDownMergeSort(leftList);
-        List<Integer> rightResult = TopDownMergeSort(rightList);
+        List<T> leftResult = topDownMergeSort(leftList);
+        List<T> rightResult = topDownMergeSort(rightList);
 
-        return MergeLists(leftResult, rightResult);
+        return mergeLists(leftResult, rightResult);
     }
 
-    private static List<Integer> MergeLists(List<Integer> leftList, List<Integer> rightList) {
-        List<Integer> result = new ArrayList<>();
+    private List<T> mergeLists(List<T> leftList, List<T> rightList) {
+        List<T> result = new ArrayList<>();
 
         int leftIndex = 0;
         int rightIndex = 0;
 
         while (leftIndex < leftList.size() && rightIndex < rightList.size()) {
-            int leftVal = leftList.get(leftIndex);
-            int rightVal = rightList.get(rightIndex);
+            T leftVal = leftList.get(leftIndex);
+            T rightVal = rightList.get(rightIndex);
 
-            if (leftVal <= rightVal) {
+            if (leftVal.compareTo(rightVal) <= 0) {
                 result.add(leftVal);
                 leftIndex++;
-            } else if (rightVal < leftVal) {
+            } else if (rightVal.compareTo(leftVal) < 0) {
                 result.add(rightVal);
                 rightIndex++;
             }
         }
 
         while (leftIndex < leftList.size()) {
-            int leftVal = leftList.get(leftIndex);
+            T leftVal = leftList.get(leftIndex);
             result.add(leftVal);
             leftIndex++;
         }
 
         while (rightIndex < rightList.size()) {
-            int rightVal = rightList.get(rightIndex);
+            T rightVal = rightList.get(rightIndex);
             result.add(rightVal);
             rightIndex++;
         }
