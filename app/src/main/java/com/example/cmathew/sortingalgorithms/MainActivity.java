@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.example.cmathew.sortingalgorithms.bubblesort.BubbleSortFragment;
 import com.example.cmathew.sortingalgorithms.mergesort.MergeSortFragment;
 import com.example.cmathew.sortingalgorithms.mergesort.MergeSorter;
 
@@ -86,8 +87,10 @@ public class MainActivity extends AppCompatActivity
             MergeSortFragment mergeSortFragment = MergeSortFragment.newInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_container, mergeSortFragment).commit();
-        } else if (menuItem.getItemId() == R.id.navigation_quick_sort) {
-
+        } else if (menuItem.getItemId() == R.id.navigation_bubble_sort) {
+            BubbleSortFragment bubbleSortFragment = BubbleSortFragment.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_container, bubbleSortFragment).commit();
         }
 
         return true;

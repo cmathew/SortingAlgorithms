@@ -5,6 +5,10 @@
               android:checked="true"
               android:title="Merge Sort" />
 
+        <item android:id="@+id/navigation_bubble_sort"
+              android:checked="false"
+              android:title="Bubble Sort" />
+
         <item android:id="@+id/navigation_quick_sort"
               android:checked="false"
               android:title="Quick Sort" />
