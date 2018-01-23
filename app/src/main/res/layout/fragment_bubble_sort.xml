@@ -5,6 +5,7 @@
              tools:context="com.example.cmathew.sortingalgorithms.bubblesort.BubbleSortFragment">
 
     <TextView
+        android:id="@+id/bubble_sort_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Bubble Boy"/>
