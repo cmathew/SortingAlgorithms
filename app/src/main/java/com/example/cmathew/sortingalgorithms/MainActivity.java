@@ -1,77 +1,106 @@
 package com.example.cmathew.sortingalgorithms;
 
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.example.cmathew.sortingalgorithms.mergesort.MergeSortFragment;
+import com.example.cmathew.sortingalgorithms.mergesort.MergeSorter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private FrameLayout contentContaier;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<Integer> listy = Arrays.asList(9, 5, 1, 0, 3, 8, 2, 6, 4, 7);
-        // List<Integer> listy = Arrays.asList(9, 5);
 
-        List<Integer> sortedListy = topDownMergeSort(listy);
+        this.drawerLayout = findViewById(R.id.drawer_layout);
+        this.navigationView = findViewById(R.id.nav_view);
+        this.contentContaier = findViewById(R.id.content_container);
 
-        TextView textView = findViewById(R.id.sort_result);
-        String resultString = TextUtils.join(", ", sortedListy);
-        textView.setText(resultString);
-    }
-
-    private List<Integer> topDownMergeSort(List<Integer> list) {
-        if (list.size() == 1) {
-            return list;
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            setupDrawerNavigation();
         }
 
-        // half of largest index
-        int pivot = list.size() / 2;
-        List<Integer> leftList = list.subList(0, pivot);
-        List<Integer> rightList = list.subList(pivot, list.size());
-
-        List<Integer> leftResult = topDownMergeSort(leftList);
-        List<Integer> rightResult = topDownMergeSort(rightList);
-
-        return mergeLists(leftResult, rightResult);
+        MergeSortFragment mergeSortFragment = MergeSortFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.content_container, mergeSortFragment).commit();
     }
 
-    private List<Integer> mergeLists(List<Integer> leftList, List<Integer> rightList) {
-        List<Integer> result = new ArrayList<>();
-
-        int leftIndex = 0;
-        int rightIndex = 0;
-
-        while (leftIndex < leftList.size() && rightIndex < rightList.size()) {
-            int leftVal = leftList.get(leftIndex);
-            int rightVal = rightList.get(rightIndex);
-
-            if (leftVal <= rightVal) {
-                result.add(leftVal);
-                leftIndex++;
-            } else if (rightVal < leftVal) {
-                result.add(rightVal);
-                rightIndex++;
+    private void setupDrawerNavigation() {
+        navigationView.setNavigationItemSelectedListener(this);
+        this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
             }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        if (menuItem.isChecked()) {
+            return true;
         }
 
-        while (leftIndex < leftList.size()) {
-            int leftVal = leftList.get(leftIndex);
-            result.add(leftVal);
-            leftIndex++;
+        menuItem.setChecked(true);
+        drawerLayout.closeDrawers();
+
+        if (menuItem.getItemId() == R.id.navigation_merge_sort) {
+            MergeSortFragment mergeSortFragment = MergeSortFragment.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_container, mergeSortFragment).commit();
+        } else if (menuItem.getItemId() == R.id.navigation_quick_sort) {
+
         }
 
-        while (rightIndex < rightList.size()) {
-            int rightVal = rightList.get(rightIndex);
-            result.add(rightVal);
-            rightIndex++;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
 
-        return result;
+        return super.onOptionsItemSelected(item);
     }
 }
